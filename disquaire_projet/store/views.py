@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.http import HttpResponse
 import datetime
-from .models import ALBUMS
+#from .models import ALBUMS
 
 
 def index(request):
