@@ -22,7 +22,7 @@ from store import views
 
 urlpatterns = [
     re_path(r"^$", views.index),
-    path('store/', include('store.urls')),
+    path('store/', include('store.urls', namespace = "store")),
     path('admin/', admin.site.urls)
 ]
 
