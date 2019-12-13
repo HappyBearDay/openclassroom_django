@@ -1,11 +1,14 @@
+import datetime
 from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse
-import datetime
-from .models import Album, Artist, Contact, Booking
 from django.db.models import Q
-from django.template import loader
+from django.db import transaction, IntegrityError
 
+from django.template import loader
 from django.core.paginator import Paginator, PageNotAnInteger, EmptyPage
+
+from .models import Album, Artist, Contact, Booking
+from .forms import ContactForm, ParagraphErrorList
 
 def create_artist( artist_names ):
     for i in artist_names:
@@ -40,10 +43,12 @@ def init_db(request):
 
 
 def index(request):
+    albums_list = Album.objects.filter(available=True).order_by('-created_at')[:12]
+    albums = create_pagination(albums_list,request = request, nb_elems = 3)
 
-    albums = Album.objects.filter(available=True).order_by('-created_at')[:12]
     context = {
-        "albums" : albums
+        "albums" : albums,
+        "paginate" : True
     }
     template = loader.get_template("store/index.html")
     return HttpResponse(template.render(context, request=request))
@@ -81,12 +86,48 @@ def detail(request, album_id):
     album = get_object_or_404(Album, pk = album_id )
    
     artists_name = ", ".join([curr_artist.name for curr_artist in album.artists.all()] )
-    
     context = {
-        'album_title': album.title,
-        'artists_name': artists_name,
-        'album_id': album.id,
-        'thumbnail': album.picture}
+            'album_title': album.title,
+            'artists_name': artists_name,
+            'album_id': album.id,
+            'thumbnail': album.picture}
+    
+    if request.method == "POST":
+        form = ContactForm(request.POST, error_class=ParagraphErrorList)
+        print("request.POST", request.POST)
+
+        if( form.is_valid()):
+
+            email = form.cleaned_data["email"]
+            name = form.cleaned_data["name"]
+            try :
+                with transaction.atomic() :
+                    contact = Contact.objects.filter(email = email).first()
+                    
+                    if contact is None :
+                        contact = Contact.objects.create( email = email, name = name)
+                
+                    album = get_object_or_404(Album, id=album_id)
+                    booking = Booking.objects.create( contact = contact, album = album)
+                    
+                    # raise IntegrityError
+
+                    album.available = False
+                    album.save()
+
+                    context = {
+                        "album_title" : album.title
+                    }
+
+                    return render(request, 'store/merci.html', context)
+            except IntegrityError:
+                form.errors['internal'] = "Une erreur interne est apparue. Merci de recommencer votre requête."
+        #else:
+        #    context["errors"] = form.errors.items()
+    else:
+        form = ContactForm()
+    context["form"] = form
+    context["errors"] = form.errors.items()
     template = loader.get_template("store/detail.html")
     return HttpResponse(template.render(context, request=request))
 
