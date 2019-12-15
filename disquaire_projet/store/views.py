@@ -28,12 +28,16 @@ def init_db(request):
     #Artist.objects.all().delete()
     #Contact.objects.all().delete()
     #Booking.objects.all().delete()
-    ARTISTS = ['Francis Cabrel', 'Elijay', 'Rosana', 'María Dolores Pradera']
+    ARTISTS = ['Francis Cabrel', 'Elijay', 'Rosana', 'María Dolores Pradera', "Alonzo", "Aznavour", "Raina Rai", "Soprano"]
 
     ALBUMS = [
         {'title': 'Sarbacane', 'artists': ['Francis Cabrel']},
         {'title': 'La Dalle', 'artists': ['Elijay']},
-        {'title': 'Luna Nueva', 'artists': ['Rosana', 'María Dolores Pradera']}
+        {'title': 'Luna Nueva', 'artists': ['Rosana', 'María Dolores Pradera']},
+        {'title': 'Jazznavour', 'artists': ['Aznavour']},
+        {'title': 'Les cités d\'or', 'artists': ['Alonzo', 'Soprano']},
+        {'title': 'Puisqu\'il faut vivre', 'artists': [ 'Soprano']},
+        {'title': '100%', 'artists': [ 'Alonzo']}
     ]
 
     #create_artist( ARTISTS )
