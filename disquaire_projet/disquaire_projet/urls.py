@@ -21,7 +21,7 @@ from store import views
 
 
 urlpatterns = [
-    re_path(r"^$", views.index),
+    re_path(r"^$", views.index, name = "index"),
     path('store/', include('store.urls', namespace = "store")),
     path('content/', admin.site.urls)
 ]
