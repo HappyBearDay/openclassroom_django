@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+        {% load static %}
+   <link rel="stylesheet" href="/media/css/style.css" />
+   <title>{% block title %}Mon blog sur les crêpes bretonnes{% endblock %}</title>
+</head>
+<body>
+        <div style="background-image: url({% static 'blog/crepes.jpg' %});"> 
+<header>Crêpes bretonnes</header>
+    <nav>
+       {% block nav %}
+       <ul>
+            <li><a href="/">Accueil</a></li>
+            <li><a href="/blog/">Blog</a></li>
+            <li><a href="/blog/contact/">Contact</a></li>
+            <li><a href="/blog/articleform/">Ecrire un article</a></li>
+            <li><a href="/blog/newmember/">Nouveau Membre</a></li>
+            <li><a href="/blog/voir_members/">Membres</a></li>
+            <li><a href="/about/">About</a></li>
+            <li><a href="/add_url/">ajouter une URL</a></li>
+       </ul>
+       {% endblock %}
+   </nav>
+   <section id="content">
+       {% block content %}{% endblock %}
+   </section>
+<footer>&copy; Crêpes bretonnes</footer>
+</div>
+</body>
+</html>

@@ -1,0 +1,15 @@
+
+{% extends "blog/base.html" %}
+{% block title %}Liste des Membres{% endblock %}
+{% block content %}
+<h1></h1>
+{% for member in members %}
+    <h2>{{ member.nom }}</h2>
+    Adresse : {{ member.adresse|linebreaks }}<br/>
+    {{ member.photo.url }}
+    <img src="{{ member.photo.url }}"/>
+{% endfor %}{% endblock %}
+
+
+
+

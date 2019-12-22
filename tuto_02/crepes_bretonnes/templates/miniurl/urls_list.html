@@ -1,0 +1,14 @@
+{% extends "blog/base.html" %}
+{% block title %}Liste des urls{% endblock %}
+{% block content %}
+<h1></h1>
+{% for url in urls %}
+url : {{ url.url|linebreaks }}<br/>
+Auteur : {{ url.auteur|linebreaks }}<br/>
+Reduced URL : <a href="/miniurl/redirection_url/{{url.reduced_url}}"> {{ url.reduced_url }}</a><br/>
+
+{% endfor %}{% endblock %}
+
+
+
+
